@@ -23,10 +23,3 @@ We created basic versions of our front page and game page of our website. We als
 ..* Want to find a way to automate falsifying facts (need algorithm to negate sentences)
 ..* We also want to create an algorithm which chooses two true facts and one false fact from our database to display on screen. This will allow us to have a larger set of questions, since we will be able to have numerous combinations. 
 
-
-###Wireframes
-Mockups are included in the repo in the images folder
-
-#Comments by Ming
-* LOL.  Team 4 is also doing something similar but using real Tweets.  Fun.
-* The idea is fantastic but your list of features make no sense to me. For what you will be using front end framework for and why? Where will you be getting the questions (or facts)?  What will the user be doing --that's what a feature really is.  Listing of just technologies mean nothing, explain further.
