@@ -1,0 +1,200 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" href="images/sloth.png"/>
+  <title>Alternative Facts</title>
+  <meta charset="utf-8"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700|Raleway:400,900" rel="stylesheet">
+
+  <script>
+  var falsefact;
+  function getFalseFact() {
+    var falserequest = new XMLHttpRequest();
+    falserequest.open("GET", "https://comp20-s2017-team13.herokuapp.com/alternative");
+    ///falserequest.open("GET", "http://localhost:5000/alternative");
+    falserequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    falserequest.onreadystatechange = function() {
+      if (falserequest.readyState == 4 && falserequest.status == 200) {
+        falsefact = falserequest.responseText;
+        //console.log("Sending false request");
+        //play_game();
+        getTrueFacts();
+      }
+    }
+    falserequest.send();
+  }
+
+  var true1;
+  var true2;
+  function getTrueFacts() {
+    //console.log("Calling get true");
+    var truerequest = new XMLHttpRequest();
+    truerequest.open("GET", "https://comp20-s2017-team13.herokuapp.com/true_fact");
+    //truerequest.open("GET", "http://localhost:5000/true_fact");
+    //console.log("Opened true request");
+    truerequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    truerequest.onreadystatechange = function() {
+      if (truerequest.readyState == 4 && truerequest.status == 200) {
+        var truefacts = JSON.parse(truerequest.responseText);
+        true1 = truefacts.fact1;
+        true2 = truefacts.fact2;
+        console.log(true1);
+        console.log(true2);
+        //console.log("Sending true request");
+        play_game();
+      }
+    }
+    truerequest.send();
+  }
+
+
+  var name;
+  var livesleft = 3;
+  var score = 0;
+
+
+  function start() {
+    name=document.getElementById("username"); 
+    getFalseFact();
+    //getTrueFacts();
+    //play_game();//stores username in var
+    frontpage=document.getElementById("frontpage");
+    gamepage=document.getElementById("gamepage");
+    frontpage.style.display= "none";
+    gamepage.style.display= "block";
+
+  }
+  
+  function play_game() {
+      console.log("Entering playgame");
+        var indicies = [];
+        while (indicies.length != 3)
+        {
+        var temp = Math.floor(Math.random() * 3);
+          if (indicies.indexOf(temp) != -1)
+             continue;
+          else  
+            indicies.push(temp);
+        }
+        //PROBLEMS
+        fact1= {'fact':falsefact,'true':false};
+        fact2= {'fact':true1,'true':true};
+        fact3= {'fact':true2,'true':true};
+        console.log(fact1 + " " + fact2 + " " + fact3);
+        $(document).ready(function() {
+            temp_facts = [];
+            temp_facts.push(fact1);
+            temp_facts.push(fact2);
+            temp_facts.push(fact3);
+
+            $("div#fact1").html(temp_facts[indicies.pop()].fact);
+            $("div#fact2").html(temp_facts[indicies.pop()].fact);
+            $("div#fact3").html(temp_facts[indicies.pop()].fact);
+
+        });
+  }
+  
+  function loselife() {
+    if (livesleft==3) {
+      heart1=document.getElementById("pixelheart1");
+      heart1.style.display="none";
+      livesleft--;
+    }
+    else if (livesleft==2) {
+      heart1=document.getElementById("pixelheart2");
+      heart1.style.display="none";
+      livesleft--;
+    }
+    else if (livesleft==1) {
+      heart1=document.getElementById("pixelheart3");
+      heart1.style.display="none";
+      livesleft--;
+      gameover();
+    }
+  }
+  function gameover() {
+    document.getElementById("fact1").style.display="none";
+    document.getElementById("fact2").style.display="none";
+    document.getElementById("fact3").style.display="none";
+    document.getElementById("gameover").style.display="block";
+  }
+  function click1() {
+    var fact=document.getElementById("fact1").textContent;
+    for(var i=0;i<3;i++) { 
+      if(fact==temp_facts[i].fact) {
+        if(temp_facts[i].true==true) {
+          loselife();
+        }
+      }
+    }
+    getFalseFact();
+    getTrueFacts();
+    play_game();
+  }
+  function click2() {
+    var fact=document.getElementById("fact2").textContent;
+    for(var i=0;i<3;i++) {
+      if(fact==temp_facts[i].fact) {
+        if(temp_facts[i].true==true) {
+          loselife();
+        }
+      }
+    }
+    getFalseFact();
+    getTrueFacts();
+    play_game();
+  }
+  function click3() {
+    var fact=document.getElementById("fact3").textContent;
+    for(var i=0;i<3;i++) {
+      if(fact==temp_facts[i].fact) {
+        if(temp_facts[i].true==true) {
+          loselife();
+        }
+      }
+    }
+    getFalseFact();
+    getTrueFacts();
+    play_game();
+  }
+  </script>
+</head>
+
+<body>
+  <h1 id="title">
+  #AlternativeFacts
+  </h1>
+  <h2>A COMP20 Project by Nick, Iris, Leah, Jong, and Caroline</h2>
+  <div id="frontpage">
+  <h3>How to Play</h3>
+  <div class="rules">In each round, you will be shown three facts. Two are true, one is false. 
+  Guess the false fact by clicking on it to earn 10 points! You'll start the game with three lives,
+  and you'll lose a life for every incorrect guess, so choose wisely!</div>
+    <forms>
+      <div class="un"><input id="username" type="text" name="username"></div><br>
+    </forms>
+    <button type="button" onclick="start()" id="start"><img class="arrow" src="http://static.tumblr.com/f536aafb3c99382cb28920965a51e82b/hr4cyvd/73Vohj1mr/tumblr_static_8xv0mjlnudwcco8co0sgskwos.png"><br>Play Game</button>
+    <img class="ka" src="images/kellyanne1.jpg">
+
+  </div>
+
+
+  <div id="gamepage">
+    <button class="button" type="button" onclick="click1()"><div id="fact1"></div></button>
+    <button class="button" type="button" onclick="click2()"><div id="fact2"></div></button>
+    <button class="button" type="button" onclick="click3()"><div id="fact3"></div></button>
+    <div id="lives"> 
+      <h4>Lives Left</h4>
+      <img src="images/pixelheart.png" id="pixelheart1"/>
+      <img src="images/pixelheart.png" id="pixelheart2"/>
+      <img src="images/pixelheart.png" id="pixelheart3"/>
+    </div>
+  </div>
+
+  <div id="gameover"><p>Gameover</p></div>
+  </div>
+</body>
+</html>
